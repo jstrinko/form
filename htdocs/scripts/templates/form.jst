@@ -1,0 +1,22 @@
+<% if (form.label) { %>
+    <h4><%= form.label %></h4>
+<% } %>
+<% if (!form.no_form) { %>
+    <form
+	<%= form.attributes() %>
+    >
+<% } %>
+<%= JST['htdocs/scripts/templates/form/fields']({ fields: form.fields, prefix: form.name, form: form }) %>
+<% if (!form.no_submit) { %>
+    <% if (form.submit_buttons) { %>
+	<% for(var x=0; x<form.submit_buttons.length; x++) { %>
+	    <% var button = form.submit_buttons[x]; %>
+	    <button <%= form.standard_attributes('', button) %>>
+	<% } %>
+    <% } else { %>
+	<button type=submit>OK</button>
+    <% } %>
+<% } %>
+<% if (!form.no_form) { %>
+    </form>
+<% } %>

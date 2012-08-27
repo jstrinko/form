@@ -1,0 +1,20 @@
+<select 
+    <%= form.field_attributes(prefix, field) %>
+>
+<% if (field.optgroups) { %>
+    <% for(var x=0; x<field.optgroups.length; x++) { %>
+	<% var group = field.optgroups[x]; %>
+	<optgroup label="<%= group.label %>">
+	    <% for(var y=0; y<group.items.length; y++) { %>
+		<% var option = group.items[x]; %> 
+		<option value="<%= option.value %>"><%= option.label %></option>
+	    <% } %>
+	</optgroup>
+    <% } %>
+<% } else { %>
+    <% for(var x=0; x<field.items.length; x++) { %>
+	<% var option = field.items[x]; %>
+	<option value="<%= option.value %>"><%= option.label %></option>
+    <% } %>
+<% } %>
+</select>
