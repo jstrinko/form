@@ -5,6 +5,8 @@
     <form
 	<%= form.attributes() %>
     >
+    <input type='hidden' name='check_<%= form.name %>' value=1 />
+    <input type='hidden' name='verifier_<%= form.name %>' value='<%= form.verifier %>' />
 <% } %>
 <%= JST['htdocs/scripts/templates/form/fields']({ fields: form.fields, prefix: form.name, form: form }) %>
 <% if (!form.no_submit) { %>
@@ -14,7 +16,7 @@
 	    <button <%= form.standard_attributes('', button) %>>
 	<% } %>
     <% } else { %>
-	<button type=submit>OK</button>
+	<center><button type=submit>OK</button></center>
     <% } %>
 <% } %>
 <% if (!form.no_form) { %>

@@ -55,7 +55,7 @@ var Form = function(data) {
     };
     this.field_attributes = function(prefix, field) {
 	var id = prefix + '::' + field.name;
-	var attrs = ' name="' + id + '" id="' + id + '"';
+	var attrs = ' name="' + field.name + '" id="' + id + '"';
 	return this.standard_attributes(attrs, field);
     };
     this.attributes = function() {
@@ -86,7 +86,40 @@ var Form = function(data) {
     $(this.container).html(JST['htdocs/scripts/templates/form/form']({ form: this }));
     var form = this;
     $(this.container + ' form[name=' + this.name + ']').submit(function(event) {
-	alert('here - ' + form.name);
+	var pairs = {};
+	var selector = form.container + ' form[name=' + form.name + ']';
+	var el = $(selector);
+	var items = el.find('input, select, textarea');
+	if (items) {
+	    items.each(function(idx, el_selector) {
+		var subel = $(el_selector);
+		pairs[subel.attr('name')] = subel.val();
+	    });
+	}
+	if (form.app && form.wait_function) {
+	    form.app[form.wait_function](form.container);
+	}
+	var old_form = form;
+	$.getJSON(el.attr('action'), pairs, function(data) {
+	    var container = data.container || old_form.container;
+	    if (data.app_function) {
+		old_form.app[data.app_function](data);
+	    }
+	    else if (typeof data.url != 'undefined') {
+		window.location.hash = data.url;
+	    }
+	    else {
+		data.action = data.action ? data.action : old_form.action;
+		data.container = container;
+		if (old_form.app) {
+		    data.app = old_form.app;
+		}
+		if (old_form.wait_function) {
+		    data.wait_function = old_form.wait_function;
+		}
+		var form = new Form(data);
+	    }
+	}); 
 	return false;
     });
 };
